@@ -11,6 +11,7 @@ CPU_SUBTYPE:=neon-vfpv4
 SUBTARGETS:=generic chromium
 
 KERNEL_PATCHVER:=6.6
+KERNEL_TESTING_PATCHVER:=6.12
 
 KERNELNAME:=zImage Image dtbs
 
@@ -21,6 +22,7 @@ DEFAULT_PACKAGES += \
 	kmod-usb-ohci kmod-usb2 kmod-usb-ledtrig-usbport \
 	kmod-phy-qcom-ipq806x-usb kmod-usb3 kmod-usb-dwc3-qcom \
 	kmod-ath10k-ct wpad-basic-mbedtls \
-	uboot-envtools
+	uboot-envtools \
+	autocore-arm
 
 $(eval $(call BuildTarget))

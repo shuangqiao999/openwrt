@@ -201,6 +201,21 @@ define Device/fortinet_fap-421e
 endef
 TARGET_DEVICES += fortinet_fap-421e
 
+define Device/ignitenet_ss-w2-ac2600
+	$(call Device/FitImage)
+	$(call Device/UbiFit)
+	DEVICE_VENDOR := IgniteNet
+	DEVICE_MODEL := SunSpot AC Wave2
+	DEVICE_ALT0_VENDOR := Accton Technology Corporation
+	DEVICE_ALT0_MODEL := EAP1024A
+	DEVICE_ALT0_VARIANT := V2
+	SOC := qcom-ipq8068
+	BLOCKSIZE := 128k
+	PAGESIZE := 2048
+	DEVICE_PACKAGES := ath10k-firmware-qca9984-ct ipq-wifi-ignitenet_ss-w2-ac2600
+endef
+TARGET_DEVICES += ignitenet_ss-w2-ac2600
+
 define Device/linksys_e8350-v1
 	$(call Device/LegacyImage)
 	DEVICE_VENDOR := Linksys
@@ -575,6 +590,29 @@ define Device/ubnt_unifi-ac-hd
 		append-rootfs | pad-rootfs | check-size | append-metadata
 endef
 TARGET_DEVICES += ubnt_unifi-ac-hd
+
+define Device/xiaomi_mi-router-hd
+	$(call Device/LegacyImage)
+	$(Device/dsa-migration)
+	DEVICE_VENDOR := Xiaomi
+	DEVICE_MODEL := Mi Router HD (R3D)
+	SOC := qcom-ipq8064
+	BLOCKSIZE := 128k
+	PAGESIZE := 2048
+	KERNEL_SIZE := 4096k
+	IMAGE_SIZE := 86016k
+	BOARD_NAME := mi-router-hd
+	SUPPORTED_DEVICES += xiaomi,r3d
+	UBINIZE_OPTS := -E 5
+	IMAGES += factory.bin
+	IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | \
+		append-ubi | pad-to $$$$(BLOCKSIZE) | check-size
+	DEVICE_PACKAGES := kmod-i2c-gpio kmod-thermal kmod-hwmon-lm75 \
+		kmod-hwmon-emc2305 hwmon-drivetemp kmod-usb-storage-uas \
+		kmod-ramoops \
+		ath10k-firmware-qca9984-ct ath10k-firmware-qca99x0-ct
+endef
+TARGET_DEVICES += xiaomi_mi-router-hd
 
 define Device/zyxel_nbg6817
 	$(Device/dsa-migration)

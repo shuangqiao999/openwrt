@@ -40,7 +40,7 @@
 		compatible = "gpio-keys";
 		pinctrl-0 = <&button_pins>;
 		pinctrl-names = "default";
-		
+
 		reset {
 			label = "reset";
 			gpios = <&qcom_pinmux 56 GPIO_ACTIVE_LOW>;
@@ -157,7 +157,7 @@
 			pins = "gpio6", "gpio7";
 		};
 	};
-	
+
 	usb_pwr_en_pins: usb_pwr_en_pins {
 		mux {
 			pins = "gpio22";
@@ -192,7 +192,7 @@
 
 		pinctrl-0 = <&spi_pins>;
 		pinctrl-names = "default";
-		cs-gpios = <&qcom_pinmux 20 GPIO_ACTIVE_HIGH>;
+		cs-gpios = <&qcom_pinmux 20 GPIO_ACTIVE_LOW>;
 
 		flash@0 {
 			compatible = "jedec,spi-nor";
@@ -329,7 +329,7 @@
 		ranges;
 
 		wifi@1,0 {
-			compatible = "pci168c,0040";
+			compatible = "qcom,ath10k";
 			reg = <0x00010000 0 0 0 0>;
 
 			nvmem-cells = <&macaddr_appsbl_7ff80 8>;
@@ -350,7 +350,7 @@
 		ranges;
 
 		wifi@1,0 {
-			compatible = "pci168c,0040";
+			compatible = "qcom,ath10k";
 			reg = <0x00010000 0 0 0 0>;
 
 			nvmem-cells = <&macaddr_appsbl_7ff80 16>;

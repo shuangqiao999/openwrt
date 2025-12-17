@@ -168,7 +168,9 @@ I2C_I801_MODULES:= \
 define KernelPackage/i2c-i801
   $(call i2c_defaults,$(I2C_I801_MODULES),59)
   TITLE:=Intel I801 and compatible I2C interfaces
-  DEPENDS:=@PCI_SUPPORT @TARGET_x86 +kmod-i2c-core +kmod-i2c-smbus
+  DEPENDS:= \
+    @PCI_SUPPORT @TARGET_x86 +kmod-i2c-core +kmod-i2c-smbus \
+    (!LINUX_6_6&&PACKAGE_kmod-i2c-mux-gpio):kmod-i2c-mux-gpio
 endef
 
 define KernelPackage/i2c-i801/description
@@ -307,7 +309,7 @@ I2C_PIIX4_MODULES:= \
 define KernelPackage/i2c-piix4
   $(call i2c_defaults,$(I2C_PIIX4_MODULES),59)
   TITLE:=Intel PIIX4 and compatible I2C interfaces
-  DEPENDS:=@PCI_SUPPORT @TARGET_x86 +kmod-i2c-core
+  DEPENDS:=@PCI_SUPPORT @TARGET_x86 +kmod-i2c-core +!LINUX_6_6:kmod-i2c-smbus
 endef
 
 define KernelPackage/i2c-piix4/description

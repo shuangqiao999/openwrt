@@ -68,7 +68,7 @@ _procd_call() {
 }
 
 _procd_wrapper() {
-	procd_lock
+	#procd_lock
 	while [ -n "$1" ]; do
 		eval "$1() { _procd_call _$1 \"\$@\"; }"
 		shift
@@ -193,6 +193,7 @@ _procd_add_jail() {
 		case $a in
 		log)	json_add_boolean "log" "1";;
 		ubus)	json_add_boolean "ubus" "1";;
+		udebug)	json_add_boolean "udebug" "1";;
 		procfs)	json_add_boolean "procfs" "1";;
 		sysfs)	json_add_boolean "sysfs" "1";;
 		ronly)	json_add_boolean "ronly" "1";;

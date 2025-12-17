@@ -50,7 +50,7 @@ endef
 
 define Package/ppp
 $(call Package/ppp/Default)
-  DEPENDS:=+kmod-ppp
+  DEPENDS:=+kmod-ppp +kmod-mppe +libpthread +shellsync
   TITLE:=PPP daemon
   VARIANT:=default
 endef
@@ -124,7 +124,7 @@ endef
 
 define Package/ppp-mod-pptp
 $(call Package/ppp/Default)
-  DEPENDS:=@(PACKAGE_ppp||PACKAGE_ppp-multilink) +kmod-pptp +kmod-mppe +resolveip
+  DEPENDS:=@(PACKAGE_ppp||PACKAGE_ppp-multilink) +kmod-pptp +kmod-mppe +resolveip +kmod-gre
   TITLE:=PPtP plugin
 endef
 

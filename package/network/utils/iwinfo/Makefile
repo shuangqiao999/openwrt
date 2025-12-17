@@ -11,13 +11,14 @@ PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL=$(PROJECT_GIT)/project/iwinfo.git
-PKG_SOURCE_DATE:=2024-10-20
-PKG_SOURCE_VERSION:=b94f066e3f5839b8509483cdd8f4f582a45fa233
-PKG_MIRROR_HASH:=ee0bce167707fe78f68a951b7ee1e0e61a92cae281e0e24eb709857ae849777e
+PKG_SOURCE_DATE:=2025-11-07
+PKG_SOURCE_VERSION:=5f4c213fc59f1a82d9f0140642d668ae2969531b
+PKG_MIRROR_HASH:=skip
 PKG_MAINTAINER:=Jo-Philipp Wich <jo@mein.io>
 PKG_LICENSE:=GPL-2.0
 
 PKG_BUILD_FLAGS:=no-lto
+PKG_CONFIG_DEPENDS:=CONFIG_WIFI_SCRIPTS_UCODE
 
 IWINFO_ABI_VERSION:=20230701
 
@@ -62,7 +63,7 @@ define Package/iwinfo
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Generalized Wireless Information utility
-  DEPENDS:=+libiwinfo
+  DEPENDS:=+@!WIFI_SCRIPTS_UCODE:libiwinfo
 endef
 
 define Package/iwinfo/description
@@ -110,10 +111,16 @@ define Package/libiwinfo-data/install
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/devices.txt $(1)/usr/share/libiwinfo/devices.txt
 endef
 
-define Package/iwinfo/install
+ifdef CONFIG_WIFI_SCRIPTS_UCODE
+  define Package/iwinfo/install
+	:
+  endef
+else
+  define Package/iwinfo/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/iwinfo $(1)/usr/bin/iwinfo
-endef
+  endef
+endif
 
 $(eval $(call BuildPackage,libiwinfo))
 $(eval $(call BuildPackage,libiwinfo-lua))

@@ -165,6 +165,7 @@ platform_pre_upgrade() {
 
 platform_do_upgrade() {
 	case "$(board_name)" in
+	aliyun,ap8220|\
 	arcadyan,aw1000|\
 	cmcc,rm2-6|\
 	compex,wpq873|\
@@ -175,7 +176,8 @@ platform_do_upgrade() {
 	netgear,sxs80|\
 	netgear,wax218|\
 	netgear,wax620|\
-	netgear,wax630)
+	netgear,wax630|\
+	zyxel,nwa210ax)
 		nand_do_upgrade "$1"
 		;;
 	asus,rt-ax89x)
@@ -228,6 +230,34 @@ platform_do_upgrade() {
 		CI_ROOTPART="rootfs"
 		emmc_do_upgrade "$1"
 		;;
+	redmi,ax6-stock|\
+	xiaomi,ax3600-stock|\
+	xiaomi,ax9000-stock)
+		part_num="$(fw_printenv -n flag_boot_rootfs)"
+		if [ "$part_num" -eq "1" ]; then
+			CI_UBIPART="rootfs_1"
+			target_num=1
+			# Reset fail flag for the current partition
+			# With both partition set to fail, the partition 2 (bit 1)
+			# is loaded
+			fw_setenv flag_try_sys2_failed 0
+		else
+			CI_UBIPART="rootfs"
+			target_num=0
+			# Reset fail flag for the current partition
+			# or uboot will skip the loading of this partition
+			fw_setenv flag_try_sys1_failed 0
+		fi
+
+		# Tell uboot to switch partition
+		fw_setenv flag_boot_rootfs $target_num
+		fw_setenv flag_last_success $target_num
+
+		# Reset success flag
+		fw_setenv flag_boot_success 0
+
+		nand_do_upgrade "$1"
+		;;
 	redmi,ax6|\
 	xiaomi,ax3600|\
 	xiaomi,ax9000)
@@ -253,6 +283,8 @@ platform_do_upgrade() {
 		CI_DATAPART="rootfs_data"
 		emmc_do_upgrade "$1"
 		;;
+	tplink,deco-x80-5g|\
+	tplink,eap620hd-v1|\
 	tplink,eap660hd-v1)
 		tplink_do_upgrade "$1"
 		;;

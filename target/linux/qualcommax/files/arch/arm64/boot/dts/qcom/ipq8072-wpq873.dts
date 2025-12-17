@@ -6,6 +6,8 @@
 #include "ipq8074.dtsi"
 #include "ipq8074-hk-cpu.dtsi"
 #include "ipq8074-ess.dtsi"
+#include "ipq8074-nss.dtsi"
+#include "ipq8074-common.dtsi"
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/input/input.h>
 #include <dt-bindings/leds/common.h>
@@ -98,35 +100,11 @@
 	};
 };
 
-&blsp1_uart5 {
-	status = "okay";
-};
-
 &blsp1_i2c6 {
 	status = "okay";
 
 	pinctrl-0 = <&i2c_pins>;
 	pinctrl-names = "default";
-};
-
-&prng {
-	status = "okay";
-};
-
-&cryptobam {
-	status = "okay";
-};
-
-&crypto {
-	status = "okay";
-};
-
-&qpic_bam {
-	status = "okay";
-};
-
-&blsp1_spi1 {
-	status = "okay";
 };
 
 &tlmm {
@@ -160,8 +138,6 @@
 	status = "okay";
 
 	flash@0 {
-		#address-cells = <1>;
-		#size-cells = <1>;
 		reg = <0>;
 		compatible = "jedec,spi-nor";
 		spi-max-frequency = <50000000>;
@@ -326,30 +302,6 @@
 	};
 };
 
-&qusb_phy_0 {
-	status = "okay";
-};
-
-&qusb_phy_1 {
-	status = "okay";
-};
-
-&ssphy_0 {
-	status = "okay";
-};
-
-&ssphy_1 {
-	status = "okay";
-};
-
-&usb_0 {
-	status = "okay";
-};
-
-&usb_1 {
-	status = "okay";
-};
-
 &mdio {
 	status = "okay";
 	pinctrl-0 = <&mdio_pins>;
@@ -443,38 +395,16 @@
 	label = "wan";
 };
 
-&pcie_qmp0 {
-	status = "okay";
-};
-
 &pcie0 {
 	status = "okay";
 
-	perst-gpio = <&tlmm 58 GPIO_ACTIVE_LOW>;
-
-	bridge@0,0 {
-		reg = <0x00020000 0 0 0 0>;
-		#address-cells = <3>;
-		#size-cells = <2>;
-		ranges;
-	};
-};
-
-&pcie_qmp1 {
-	status = "okay";
+	perst-gpios = <&tlmm 58 GPIO_ACTIVE_LOW>;
 };
 
 &pcie1 {
 	status = "okay";
 
-	perst-gpio = <&tlmm 62 GPIO_ACTIVE_HIGH>;
-
-	bridge@1,0 {
-		reg = <0x00010000 0 0 0 0>;
-		#address-cells = <3>;
-		#size-cells = <2>;
-		ranges;
-	};
+	perst-gpios = <&tlmm 62 GPIO_ACTIVE_HIGH>;
 };
 
 &wifi {

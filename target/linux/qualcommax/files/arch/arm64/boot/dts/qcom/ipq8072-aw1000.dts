@@ -6,6 +6,8 @@
 #include "ipq8074.dtsi"
 #include "ipq8074-hk-cpu.dtsi"
 #include "ipq8074-ess.dtsi"
+#include "ipq8074-nss.dtsi"
+#include "ipq8074-common.dtsi"
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/input/input.h>
 #include <dt-bindings/leds/common.h>
@@ -56,12 +58,6 @@
 			gpio-export,name = "lte_reset";
 			gpio-export,output = <1>;
 			gpios = <&tlmm 63 GPIO_ACTIVE_HIGH>;
-		};
-
-		usb-vbus {
-			gpio-export,name = "usb_vbus";
-			gpio-export,output = <0>;
-			gpios = <&tlmm 9 GPIO_ACTIVE_LOW>;
 		};
 	};
 
@@ -160,6 +156,15 @@
 			gpios = <&led_gpio 11 GPIO_ACTIVE_HIGH>;
 		};
 	};
+
+	usb_vbus: regulator-usb-vbus {
+		compatible = "regulator-fixed";
+		regulator-name = "usb_vbus";
+		regulator-min-microvolt = <5000000>;
+		regulator-max-microvolt = <5000000>;
+		gpios = <&tlmm 9 GPIO_ACTIVE_LOW>;
+		regulator-boot-on;
+	};
 };
 
 &tlmm {
@@ -180,26 +185,6 @@
 	};
 };
 
-&blsp1_uart5 {
-	status = "okay";
-};
-
-&cryptobam {
-	status = "okay";
-};
-
-&crypto {
-	status = "okay";
-};
-
-&prng {
-	status = "okay";
-};
-
-&qpic_bam {
-	status = "okay";
-};
-
 &qpic_nand {
 	status = "okay";
 
@@ -215,28 +200,10 @@
 	};
 };
 
-&qusb_phy_0 {
-	status = "okay";
-};
-
 &qusb_phy_1 {
 	status = "okay";
-};
 
-&ssphy_0 {
-	status = "okay";
-};
-
-&ssphy_1 {
-	status = "okay";
-};
-
-&usb_0 {
-	status = "okay";
-};
-
-&usb_1 {
-	status = "okay";
+	vdd-supply = <&usb_vbus>;
 };
 
 &mdio {

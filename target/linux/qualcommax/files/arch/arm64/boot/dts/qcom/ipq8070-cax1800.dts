@@ -6,6 +6,8 @@
 #include "ipq8074-512m.dtsi"
 #include "ipq8074-ac-cpu.dtsi"
 #include "ipq8074-ess.dtsi"
+#include "ipq8074-nss.dtsi"
+#include "ipq8074-common.dtsi"
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/input/input.h>
 
@@ -77,26 +79,6 @@
 	};
 };
 
-&blsp1_uart5 {
-	status = "okay";
-};
-
-&prng {
-	status = "okay";
-};
-
-&cryptobam {
-	status = "okay";
-};
-
-&crypto {
-	status = "okay";
-};
-
-&qpic_bam {
-	status = "okay";
-};
-
 &qpic_nand {
 	status = "okay";
 
@@ -126,8 +108,6 @@
 	status = "okay";
 
 	m25p80@0 {
-		#address-cells = <1>;
-		#size-cells = <1>;
 		reg = <0>;
 		compatible = "jedec,spi-nor";
 		spi-max-frequency = <50000000>;

@@ -12,6 +12,7 @@ CPU_TYPE:=cortex-a9
 SUBTARGETS:=generic
 
 KERNEL_PATCHVER:=6.6
+KERNEL_TESTING_PATCHVER:=6.12
 
 define Target/Description
 	Build firmware images for Broadcom based BCM47xx/53xx routers with ARM CPU, *not* MIPS.
@@ -24,6 +25,7 @@ KERNELNAME:=zImage dtbs
 DEFAULT_PACKAGES += nvram \
 	osafeloader oseama otrx \
 	kmod-gpio-button-hotplug \
-	kmod-leds-gpio
+	kmod-leds-gpio \
+	autocore-arm
 
 $(eval $(call BuildTarget))

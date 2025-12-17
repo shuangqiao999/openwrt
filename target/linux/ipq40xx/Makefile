@@ -9,6 +9,7 @@ CPU_SUBTYPE:=neon-vfpv4
 SUBTARGETS:=generic chromium mikrotik
 
 KERNEL_PATCHVER:=6.6
+KERNEL_TESTING_PATCHVER:=6.12
 
 KERNELNAME:=zImage Image dtbs
 
@@ -18,6 +19,7 @@ DEFAULT_PACKAGES += \
 	kmod-leds-gpio kmod-gpio-button-hotplug \
 	kmod-ath10k-ct wpad-basic-mbedtls \
 	kmod-usb3 kmod-usb-dwc3 ath10k-firmware-qca4019-ct \
-	uboot-envtools
+	uboot-envtools \
+	ath10k-board-qca4019 autocore-arm
 
 $(eval $(call BuildTarget))
