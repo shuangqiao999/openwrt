@@ -32,6 +32,9 @@ DEFAULT_PACKAGES:=\
 	uci \
 	uclient-fetch \
 	urandom-seed \
+	luci luci-compat wget-ssl curl ca-certificates htop \
+	default-settings luci-app-upnp luci-app-wol luci-app-ramfree \
+	luci-app-ddns ddns-scripts-cloudflare ddns-scripts_aliyun ddns-scripts_dnspod \
 	urngd
 
 ##@
@@ -50,10 +53,9 @@ DEFAULT_PACKAGES.nas:=\
 # @brief Default packages for @DEVICE_TYPE router.
 ##
 DEFAULT_PACKAGES.router:=\
-	dnsmasq \
+	dnsmasq-full \
 	firewall4 \
 	nftables \
-	kmod-nft-offload \
 	odhcp6c \
 	odhcpd-ipv6only \
 	ppp \
@@ -148,7 +150,10 @@ ifeq ($(TARGET_BUILD),1)
   endif
 endif
 
-GENERIC_PLATFORM_DIR := $(TOPDIR)/target/linux/generic
+GENERIC_PLATFORM_DIR := $(TOPDIR)/target/linux/$(BOARD)/base_generic
+ifeq ($(wildcard $(GENERIC_PLATFORM_DIR)),)
+  GENERIC_PLATFORM_DIR := $(TOPDIR)/target/linux/generic
+endif
 
 ifneq ($(TARGET_BUILD)$(if $(DUMP),,1),)
   include $(INCLUDE_DIR)/kernel-version.mk

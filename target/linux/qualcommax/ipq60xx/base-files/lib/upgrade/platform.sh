@@ -115,10 +115,14 @@ platform_do_upgrade() {
 		fw_setenv bootcount 0
 		nand_do_upgrade "$1"
 		;;
+	cmiot,ax18|\
 	glinet,gl-ax1800|\
 	glinet,gl-axt1800|\
 	netgear,wax214|\
-	qihoo,360v6)
+	qihoo,360v6|\
+	redmi,ax5|\
+	xiaomi,ax1800|\
+	zn,m2)
 		nand_do_upgrade "$1"
 		;;
 	netgear,wax610|\
@@ -146,6 +150,14 @@ platform_do_upgrade() {
 	tplink,eap623od-hd-v1|\
 	tplink,eap625-outdoor-hd-v1)
 		tplink_do_upgrade "$1"
+		;;
+	jdcloud,re-cs-02|\
+	jdcloud,re-cs-07|\
+	jdcloud,re-ss-01|\
+	redmi,ax5-jdcloud)
+		kernelname="0:HLOS"
+		rootfsname="rootfs"
+		mmc_do_upgrade "$1"
 		;;
 	yuncore,fap650)
 		[ "$(fw_printenv -n owrt_env_ver 2>/dev/null)" != "7" ] && yuncore_fap650_env_setup

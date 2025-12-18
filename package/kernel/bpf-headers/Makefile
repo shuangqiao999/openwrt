@@ -16,7 +16,10 @@ PKG_NAME:=linux
 PKG_PATCHVER:=6.12
 
 # Manually include kernel version and hash from kernel details file
-GENERIC_PLATFORM_DIR := $(CURDIR)/../../../target/linux/generic
+GENERIC_PLATFORM_DIR := $(CURDIR)/../../../target/linux/$(BOARD)/base_generic
+ifeq ($(wildcard $(GENERIC_PLATFORM_DIR)),)
+  GENERIC_PLATFORM_DIR := $(CURDIR)/../../../target/linux/generic
+endif
 include $(GENERIC_PLATFORM_DIR)/kernel-$(PKG_PATCHVER)
 
 PKG_VERSION:=$(PKG_PATCHVER)$(strip $(LINUX_VERSION-$(PKG_PATCHVER)))

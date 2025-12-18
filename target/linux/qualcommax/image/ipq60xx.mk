@@ -10,6 +10,12 @@ define Build/wax610-netgear-tar
 	rm -rf $@.tmp
 endef
 
+define Device/EmmcImage
+	IMAGES += factory.bin sysupgrade.bin
+	IMAGE/factory.bin := append-rootfs | pad-rootfs | pad-to 64k
+	IMAGE/sysupgrade.bin/squashfs := append-rootfs | pad-to 64k | sysupgrade-tar rootfs=$$$$@ | append-metadata
+endef
+
 define Device/8devices_mango-dvk
 	$(call Device/FitImageLzma)
 	DEVICE_VENDOR := 8devices
@@ -48,6 +54,20 @@ define Device/cambiumnetworks_xe3-4
 endef
 TARGET_DEVICES += cambiumnetworks_xe3-4
 
+define Device/cmiot_ax18
+	$(call Device/FitImage)
+	$(call Device/UbiFit)
+	DEVICE_VENDOR := CMIOT
+	DEVICE_MODEL := AX18
+	BLOCKSIZE := 128k
+	PAGESIZE := 2048
+	DEVICE_DTS_CONFIG := config@cp03-c1
+	DEVICE_DTS := ipq6000-cmiot-ax18
+	SOC := ipq6000
+	DEVICE_PACKAGES := ipq-wifi-cmiot_ax18 kmod-fs-ext4 mkf2fs f2fsck kmod-fs-f2fs
+endef
+TARGET_DEVICES += cmiot_ax18
+
 define Device/glinet_gl-common
 	$(call Device/FitImage)
 	$(call Device/UbiFit)
@@ -56,14 +76,14 @@ define Device/glinet_gl-common
 	PAGESIZE := 2048
 	DEVICE_DTS_CONFIG := config@cp03-c1
 	SOC := ipq6000
-	IMAGES += factory.bin
-	IMAGE/factory.bin := append-ubi | append-gl-metadata
+	DEVICE_PACKAGES := e2fsprogs dosfstools kmod-fs-ext4 kmod-fs-ntfs kmod-fs-vfat kmod-fs-exfat block-mount kmod-usb-storage kmod-usb2 fdisk
 endef
 
 define Device/glinet_gl-ax1800
 	$(call Device/glinet_gl-common)
 	DEVICE_MODEL := GL-AX1800
-	DEVICE_PACKAGES := ipq-wifi-glinet_gl-ax1800
+	DEVICE_PACKAGES += ipq-wifi-glinet_gl-ax1800
+	DEVICE_DTS := ipq6000-glinet-gl-ax1800
 	SUPPORTED_DEVICES += glinet,ax1800
 endef
 TARGET_DEVICES += glinet_gl-ax1800
@@ -71,10 +91,56 @@ TARGET_DEVICES += glinet_gl-ax1800
 define Device/glinet_gl-axt1800
 	$(call Device/glinet_gl-common)
 	DEVICE_MODEL := GL-AXT1800
-	DEVICE_PACKAGES := ipq-wifi-glinet_gl-axt1800 kmod-hwmon-pwmfan
+	DEVICE_PACKAGES += ipq-wifi-glinet_gl-axt1800 kmod-hwmon-pwmfan
+	DEVICE_DTS := ipq6000-glinet-gl-axt1800
 	SUPPORTED_DEVICES += glinet,axt1800
 endef
 TARGET_DEVICES += glinet_gl-axt1800
+
+define Device/jdcloud_re-cs-02
+	$(call Device/FitImage)
+	$(call Device/EmmcImage)
+	DEVICE_VENDOR := JDCloud
+	DEVICE_MODEL := RE-CS-02 (AX6600)
+	DEVICE_DTS_CONFIG := config@cp03-c3
+	DEVICE_DTS := ipq6010-jdcloud-re-cs-02
+	SOC := ipq6010
+	DEVICE_PACKAGES := ipq-wifi-jdcloud_re-cs-02 kmod-ath11k-pci ath11k-firmware-qcn9074 kmod-fs-ext4 mkf2fs f2fsck kmod-fs-f2fs luci-app-athena-led
+	BLOCKSIZE := 64k
+	KERNEL_SIZE := 6144k
+	IMAGE/factory.bin := append-kernel | pad-to $${KERNEL_SIZE}  |  append-rootfs | append-metadata
+endef
+TARGET_DEVICES += jdcloud_re-cs-02
+
+define Device/jdcloud_re-cs-07
+	$(call Device/FitImage)
+	$(call Device/EmmcImage)
+	DEVICE_VENDOR := JDCloud
+	DEVICE_MODEL := RE-CS-07
+	KERNEL_SIZE := 6144k
+	BLOCKSIZE := 128k
+	SOC := ipq6010
+	DEVICE_DTS_CONFIG := config@cp03-c4
+	DEVICE_DTS := ipq6010-jdcloud-re-cs-07
+	DEVICE_PACKAGES := -ath11k-firmware-ipq6018 -ath11k-firmware-qcn9074 -kmod-ath11k -kmod-ath11k-ahb -kmod-ath11k-pci -hostapd-common -wpad-openssl
+	IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-rootfs | append-metadata
+endef
+TARGET_DEVICES += jdcloud_re-cs-07
+
+define Device/jdcloud_re-ss-01
+	$(call Device/FitImage)
+	$(call Device/EmmcImage)
+	DEVICE_VENDOR := JDCloud
+	DEVICE_MODEL := RE-SS-01 (AX1800 Pro)
+	DEVICE_DTS_CONFIG := config@cp03-c2
+	DEVICE_DTS := ipq6000-jdcloud-re-ss-01
+	SOC := ipq6000
+	DEVICE_PACKAGES := ipq-wifi-jdcloud_re-ss-01 kmod-fs-ext4 mkf2fs f2fsck kmod-fs-f2fs
+	BLOCKSIZE := 64k
+	KERNEL_SIZE := 6144k
+	IMAGE/factory.bin := append-kernel | pad-to $${KERNEL_SIZE}  |  append-rootfs | append-metadata
+endef
+TARGET_DEVICES += jdcloud_re-ss-01
 
 define Device/linksys_mr
 	$(call Device/FitImage)
@@ -161,6 +227,35 @@ define Device/qihoo_360v6
 endef
 TARGET_DEVICES += qihoo_360v6
 
+define Device/redmi_ax5
+	$(call Device/FitImage)
+	$(call Device/UbiFit)
+	DEVICE_VENDOR := Redmi
+	DEVICE_MODEL := AX5
+	BLOCKSIZE := 128k
+	PAGESIZE := 2048
+	DEVICE_DTS_CONFIG := config@cp03-c1
+	DEVICE_DTS := ipq6000-xiaomi-redmi-ax5
+	SOC := ipq6000
+	DEVICE_PACKAGES := ipq-wifi-redmi_ax5
+endef
+TARGET_DEVICES += redmi_ax5
+
+define Device/redmi_ax5-jdcloud
+	$(call Device/FitImage)
+	$(call Device/EmmcImage)
+	DEVICE_VENDOR := Redmi
+	DEVICE_MODEL := AX5 JDCloud
+	#BLOCKSIZE := 64k
+	KERNEL_SIZE := 6144k
+	DEVICE_DTS_CONFIG := config@cp03-c1
+	DEVICE_DTS := ipq6000-xiaomi-redmi-ax5-jdcloud
+	SOC := ipq6000
+	DEVICE_PACKAGES := ipq-wifi-redmi_ax5-jdcloud
+	IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-rootfs | append-metadata
+endef
+TARGET_DEVICES += redmi_ax5-jdcloud
+
 define Device/tplink_eap610-outdoor
 	$(call Device/FitImage)
 	$(call Device/UbiFit)
@@ -215,6 +310,20 @@ define Device/tplink_eap625-outdoor-hd-v1
 endef
 TARGET_DEVICES += tplink_eap625-outdoor-hd-v1
 
+define Device/xiaomi_ax1800
+	$(call Device/FitImage)
+	$(call Device/UbiFit)
+	DEVICE_VENDOR := Xiaomi
+	DEVICE_MODEL := AX1800
+	BLOCKSIZE := 128k
+	PAGESIZE := 2048
+	DEVICE_DTS_CONFIG := config@cp03-c1
+	DEVICE_DTS := ipq6000-xiaomi-ax1800
+	SOC := ipq6000
+	DEVICE_PACKAGES := ipq-wifi-xiaomi_ax1800
+endef
+TARGET_DEVICES += xiaomi_ax1800
+
 define Device/yuncore_fap650
 	$(call Device/FitImage)
 	$(call Device/UbiFit)
@@ -229,3 +338,17 @@ define Device/yuncore_fap650
 	IMAGE/factory.ubin := append-ubi | qsdk-ipq-factory-nand
 endef
 TARGET_DEVICES += yuncore_fap650
+
+define Device/zn_m2
+	$(call Device/FitImage)
+	$(call Device/UbiFit)
+	DEVICE_VENDOR := ZN
+	DEVICE_MODEL := M2
+	BLOCKSIZE := 128k
+	PAGESIZE := 2048
+	DEVICE_DTS_CONFIG := config@cp03-c1
+	DEVICE_DTS := ipq6000-zn-m2
+	SOC := ipq6000
+	DEVICE_PACKAGES := ipq-wifi-zn_m2
+endef
+TARGET_DEVICES += zn_m2

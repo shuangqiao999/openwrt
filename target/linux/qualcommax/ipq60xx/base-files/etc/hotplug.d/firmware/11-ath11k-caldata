@@ -22,6 +22,7 @@ case "$FIRMWARE" in
 	cambiumnetworks,xe3-4)
 		caldata_extract "0:ART" 0x1000 0x10000
 		;;
+	cmiot,ax18|\
 	glinet,gl-ax1800|\
 	glinet,gl-axt1800)
 		caldata_extract "0:art" 0x1000 0x10000
@@ -29,6 +30,16 @@ case "$FIRMWARE" in
 		ath11k_patch_mac $(macaddr_add $label_mac 3) 0
 		ath11k_patch_mac $(macaddr_add $label_mac 2) 1
 		ath11k_set_macflag
+		;;
+	jdcloud,re-ss-01|\
+	redmi,ax5-jdcloud)
+		caldata_extract_mmc "0:ART" 0x1000 0x10000
+		;;
+	netgear,wax214|\
+	redmi,ax5|\
+	xiaomi,ax1800|\
+	zn,m2)
+		caldata_extract "0:art" 0x1000 0x10000
 		;;
 	linksys,mr7350|\
 	linksys,mr7500)
@@ -38,9 +49,6 @@ case "$FIRMWARE" in
 		ath11k_patch_mac $(macaddr_add $addr 1) 1
 		ath11k_set_macflag
 		ath11k_remove_regdomain
-		;;
-	netgear,wax214)
-		caldata_extract "0:art" 0x1000 0x10000
 		;;
 	netgear,wax610|\
 	netgear,wax610y)
@@ -75,6 +83,9 @@ case "$FIRMWARE" in
 	case "$board" in
 	cambiumnetworks,xe3-4)
 		caldata_extract "0:ART" 0x26800 0x20000
+		;;
+	jdcloud,re-cs-02)
+		caldata_extract_mmc "0:ART" 0x26800 0x20000
 		;;
 	linksys,mr7500)
 		caldata_extract "0:art" 0x26800 0x20000

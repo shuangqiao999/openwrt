@@ -2,6 +2,8 @@
 
 #include "ipq6018-512m.dtsi"
 #include "ipq6018-ess.dtsi"
+#include "ipq6018-nss.dtsi"
+#include "ipq6018-common.dtsi"
 
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/input/input.h>
@@ -103,12 +105,6 @@
 	};
 };
 
-&blsp1_uart3 {
-	pinctrl-0 = <&serial_3_pins>;
-	pinctrl-names = "default";
-	status = "okay";
-};
-
 &blsp1_uart4 {
 	pinctrl-0 = <&tluart_pins>;
 	pinctrl-names = "default";
@@ -121,25 +117,20 @@
 	status = "okay";
 };
 
-&qpic_bam {
-	status = "okay";
-};
-
 &qpic_nand {
 	status = "okay";
 
 	nand@0 {
+		#address-cells = <1>;
+		#size-cells = <1>;
 		reg = <0>;
+
 		nand-ecc-strength = <4>;
 		nand-ecc-step-size = <512>;
 		nand-bus-width = <8>;
-		#address-cells = <1>;
-		#size-cells = <1>;
 
 		partitions: partitions {
 			compatible = "fixed-partitions";
-			#address-cells = <1>;
-			#size-cells = <1>;
 
 			partition@0 {
 				label = "0:sbl1";
@@ -195,8 +186,6 @@
 
 				nvmem-layout {
 					compatible = "fixed-layout";
-					#address-cells = <1>;
-					#size-cells = <1>;
 
 					macaddr_wan: macaddr@0 {
 						reg = <0x0 0x6>;
@@ -207,8 +196,6 @@
 					};
 				};
 			};
-
-			/* rootfs defined in variant dts */
 
 			partition@7d00000 {
 				label = "0:ethphyfw";
@@ -222,18 +209,6 @@
 &qusb_phy_0 {
 	vdd-supply = <&reg_usb_vbus>;
 	status = "okay";
-};
-
-&ssphy_0 {
-	status = "okay";
-};
-
-&usb3 {
-	status = "okay";
-};
-
-&rpm {
-	status = "disabled";
 };
 
 &mdio {
@@ -286,18 +261,22 @@
 			port_id = <1>;
 			phy_address = <0>;
 		};
+
 		port@2 {
 			port_id = <2>;
 			phy_address = <1>;
 		};
+
 		port@3 {
 			port_id = <3>;
 			phy_address = <2>;
 		};
+
 		port@4 {
 			port_id = <4>;
 			phy_address = <3>;
 		};
+
 		port@5 {
 			port_id = <5>;
 			phy_address = <4>;

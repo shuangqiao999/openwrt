@@ -18,6 +18,12 @@ define Build/mstc-header
 	rm -f $@.crclen
 endef
 
+define Device/EmmcImage
+	IMAGES := factory.bin sysupgrade.bin
+	IMAGE/factory.bin := append-kernel | pad-to 12288k | append-rootfs | append-metadata
+	IMAGE/sysupgrade.bin/squashfs := append-rootfs | pad-to 64k | sysupgrade-tar rootfs=$$$$@ | append-metadata
+endef
+
 define Device/cmcc_pz-l8
 	$(call Device/FitImageLzma)
 	$(call Device/UbiFit)
@@ -90,6 +96,18 @@ define Device/iodata_wn-dax3000gr
 		ipq-wifi-iodata_wn-dax3000gr
 endef
 TARGET_DEVICES += iodata_wn-dax3000gr
+
+define Device/jdcloud_re-cs-03
+	$(call Device/FitImage)
+	$(call Device/EmmcImage)
+	DEVICE_VENDOR := JDCloud
+	DEVICE_MODEL := AX3000
+	DEVICE_DTS_CONFIG := config@mp03.5-c2
+	BLOCKSIZE := 64k
+	KERNEL_SIZE := 6144k
+	SOC := ipq5018
+endef
+TARGET_DEVICES += jdcloud_re-cs-03
 
 define Device/linksys_ipq50xx_mx_base
 	$(call Device/FitImageLzma)

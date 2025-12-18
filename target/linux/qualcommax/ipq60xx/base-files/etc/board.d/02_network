@@ -22,6 +22,7 @@ ipq60xx_setup_interfaces()
 		ucidef_set_interface_lan "lan1 lan2" "dhcp"
 		;;
 	glinet,gl-ax1800|\
+	jdcloud,re-cs-02|\
 	linksys,mr7350|\
 	linksys,mr7500|\
 	yuncore,fap650)
@@ -30,7 +31,14 @@ ipq60xx_setup_interfaces()
 	netgear,wax214)
 		ucidef_set_interfaces_lan_wan "lan"
 		;;
-	qihoo,360v6)
+	cmiot,ax18|\
+	jdcloud,re-cs-07|\
+	jdcloud,re-ss-01|\
+	qihoo,360v6|\
+	redmi,ax5|\
+	redmi,ax5-jdcloud|\
+	xiaomi,ax1800|\
+	zn,m2)
 		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3" "wan"
 		;;
 	netgear,wax610|\
