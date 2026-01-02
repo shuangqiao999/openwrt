@@ -5,3 +5,4 @@ src-git telephony https://github.com/openwrt/telephony.git;openwrt-24.10
 src-git lienol https://github.com/Lienol/openwrt-package.git;main
 src-git other https://github.com/Lienol/openwrt-package.git;other
 src-git OAF https://github.com/shuangqiao999/OpenAppFilter.git;v6
+src-git packages https://github.com/openwrt/packages.git;openwrt-24.10
