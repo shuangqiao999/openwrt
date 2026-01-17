@@ -8,13 +8,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nss-firmware
-PKG_SOURCE_DATE:=2025-05-01
-PKG_SOURCE_VERSION:=e4726900138b3e77fbbeaa32e58aa40a66d6b01a
-PKG_MIRROR_HASH:=skip
+PKG_VERSION:=2025.05.01
+PKG_HASH:=10a4b1e69470db150915cb063525436494b8ae4eebb8b50ea6ad894082d7abb0
+PKG_SOURCE_URL:=https://github.com/qosmio/qca-sdk-nss-fw/releases/download/v$(PKG_VERSION)
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.zst
 PKG_RELEASE:=1
-
-PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL:=https://github.com/qosmio/qca-sdk-nss-fw.git
 
 PKG_LICENSE_FILES:=LICENSE.md
 
