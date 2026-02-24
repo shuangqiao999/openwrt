@@ -22,6 +22,7 @@ DEFAULT_PACKAGES += \
 	grub2-bios-setup \
 	fdisk kmod-e1000e kmod-igb kmod-igc kmod-ixgbe kmod-fs-f2fs \
 	lm-sensors autocore-x86 \
+        kmod-tcp-bbr
 
 $(eval $(call BuildTarget))
 
