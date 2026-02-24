@@ -33,8 +33,7 @@ DEFAULT_PACKAGES:=\
 	uclient-fetch \
 	urandom-seed \
 	luci luci-compat wget-ssl curl ca-certificates htop \
-	default-settings luci-app-upnp luci-app-wol luci-app-ramfree \
-	luci-app-ddns ddns-scripts-cloudflare ddns-scripts_aliyun ddns-scripts_dnspod \
+	default-settings luci-app-upnp luci-app-ramfree \
 	urngd
 
 ##@
@@ -220,7 +219,7 @@ LINUX_RECONF_DIFF = $(SCRIPT_DIR)/kconfig.pl - '>' $(call __linux_confcmd,$(filt
 ifeq ($(DUMP),1)
   BuildTarget=$(BuildTargets/DumpCurrent)
 
-  CPU_CFLAGS = -Os -pipe
+    CPU_CFLAGS = -O3 -march=x86-64-v2 -mtune=goldmont-plus -pipe
   ifneq ($(findstring mips,$(ARCH)),)
     ifneq ($(findstring mips64,$(ARCH)),)
       CPU_TYPE ?= mips64
