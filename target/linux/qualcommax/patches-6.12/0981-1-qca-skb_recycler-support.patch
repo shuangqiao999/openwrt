@@ -21,7 +21,7 @@
  };
  
  /* if you move pkt_type around you also must adapt those constants */
-@@ -1286,7 +1290,7 @@ static inline void kfree_skb_list(struct
+@@ -1318,7 +1322,7 @@ static inline void kfree_skb_list(struct
  	kfree_skb_list_reason(segs, SKB_DROP_REASON_NOT_SPECIFIED);
  }
  
@@ -30,7 +30,7 @@
  void consume_skb(struct sk_buff *skb);
  #else
  static inline void consume_skb(struct sk_buff *skb)
-@@ -1297,6 +1301,8 @@ static inline void consume_skb(struct sk
+@@ -1329,6 +1333,8 @@ static inline void consume_skb(struct sk
  
  void __consume_stateless_skb(struct sk_buff *skb);
  void  __kfree_skb(struct sk_buff *skb);
@@ -105,7 +105,7 @@
  obj-$(CONFIG_NET_DEVMEM) += devmem.o
 --- a/net/core/dev.c
 +++ b/net/core/dev.c
-@@ -6212,12 +6212,17 @@ static int process_backlog(struct napi_s
+@@ -6225,12 +6225,17 @@ static int process_backlog(struct napi_s
  
  	napi->weight = READ_ONCE(net_hotdata.dev_rx_weight);
  	while (again) {
