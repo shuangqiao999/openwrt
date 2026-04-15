@@ -12,7 +12,7 @@ PKG_SOURCE_PROTO:=git
 PKG_SOURCE_DATE:=2023-05-17
 PKG_SOURCE_URL:=https://github.com/fullcone-nat-nftables/nft-fullcone.git
 PKG_SOURCE_VERSION:=07d93b626ce5ea885cd16f9ab07fac3213c355d9
-PKG_MIRROR_HASH:=6ea91089b9350df186961ac7a90200cc42083a2d29bb78f433a7279a25b76c2a
+PKG_MIRROR_HASH:=84d54b5e6091148c31d4eddff2f8ead763c9ef318fdf35098a6f9cea9a29b7c8
 
 PKG_MAINTAINER:=Syrone Wong <wong.syrone@gmail.com>
 
