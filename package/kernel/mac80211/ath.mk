@@ -15,12 +15,13 @@ PKG_CONFIG_DEPENDS += \
 	CONFIG_ATH11K_THERMAL \
 	CONFIG_ATH11K_DEBUGFS_STA \
 	CONFIG_ATH11K_DEBUGFS_HTT_STATS \
-	CONFIG_ATH_USER_REGD \
 	CONFIG_ATH11K_MEM_PROFILE_1G \
 	CONFIG_ATH11K_MEM_PROFILE_512M \
 	CONFIG_ATH11K_MEM_PROFILE_256M \
 	CONFIG_ATH11K_NSS_SUPPORT \
-	CONFIG_ATH11K_NSS_MESH_SUPPORT
+	CONFIG_ATH11K_NSS_MESH_SUPPORT \
+	CONFIG_ATH12K_THERMAL \
+	CONFIG_ATH_USER_REGD
 
 ifdef CONFIG_PACKAGE_MAC80211_DEBUGFS
   config-y += \
@@ -73,6 +74,7 @@ config-$(CONFIG_ATH11K_NSS_SUPPORT) += ATH11K_NSS_SUPPORT
 config-$(CONFIG_ATH11K_NSS_MESH_SUPPORT) += ATH11K_NSS_MESH_SUPPORT
 config-$(CONFIG_ATH11K_DEBUGFS_STA) += ATH11K_DEBUGFS_STA
 config-$(CONFIG_ATH11K_DEBUGFS_HTT_STATS) += ATH11K_DEBUGFS_HTT_STATS
+config-$(CONFIG_ATH12K_THERMAL) += ATH12K_THERMAL
 
 config-$(call config_package,ath9k-htc) += ATH9K_HTC
 config-$(call config_package,ath10k,regular) += ATH10K ATH10K_PCI
@@ -457,7 +459,8 @@ define KernelPackage/ath12k
   URL:=https://wireless.wiki.kernel.org/en/users/drivers/ath12k
   DEPENDS+= @PCI_SUPPORT +kmod-ath +@DRIVER_11AC_SUPPORT +@DRIVER_11AX_SUPPORT \
   +kmod-crypto-michael-mic +kmod-qrtr-mhi \
-  +kmod-qcom-qmi-helpers +@DRIVER_11BE_SUPPORT
+  +kmod-qcom-qmi-helpers +@DRIVER_11BE_SUPPORT \
+  +ATH12K_THERMAL:kmod-hwmon-core +ATH12K_THERMAL:kmod-thermal
   FILES:=$(PKG_BUILD_DIR)/drivers/net/wireless/ath/ath12k/ath12k.ko
   AUTOLOAD:=$(call AutoProbe,ath12k)
 endef
@@ -465,6 +468,14 @@ endef
 define KernelPackage/ath12k/description
 This module adds support for Qualcomm Technologies 802.11be family of
 chipsets with PCI bus.
+endef
+
+define KernelPackage/ath12k/config
+
+       config ATH12K_THERMAL
+               bool "Enable ath12k thermal sensor support"
+               depends on PACKAGE_kmod-ath12k
+
 endef
 
 define KernelPackage/carl9170

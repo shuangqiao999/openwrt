@@ -10,7 +10,7 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=iptables
 PKG_VERSION:=1.8.10
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE_URL:=https://netfilter.org/projects/iptables/files
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
@@ -54,7 +54,7 @@ endef
 define Package/iptables-zz-legacy
 $(call Package/iptables/Default)
   TITLE:=IP firewall administration tool
-  DEPENDS+= +xtables-legacy
+  DEPENDS+= +xtables-legacy +iptables-mod-nat
   PROVIDES:=iptables iptables-legacy
   ALTERNATIVES:=\
     200:/usr/sbin/iptables:xtables-legacy-multi \
@@ -142,8 +142,9 @@ endef
 define Package/iptables-nft
 $(call Package/iptables/Default)
   TITLE:=IP firewall administration tool nft
-  DEPENDS:=+kmod-ipt-core +xtables-nft
+  DEPENDS:=+kmod-ipt-core +xtables-nft +iptables-mod-nat
   PROVIDES:=iptables
+  DEFAULT_VARIANT:=1
   ALTERNATIVES:=\
     300:/usr/sbin/iptables:xtables-nft-multi \
     300:/usr/sbin/iptables-restore:xtables-nft-multi \
@@ -251,6 +252,15 @@ iptables extensions for matching ipsec traffic.
   - esp
   - policy
 
+endef
+
+define Package/iptables-mod-nat
+$(call Package/iptables/Module, +kmod-ipt-nat)
+  TITLE:= NAT extensions
+endef
+
+define Package/iptables-mod-nat/description
+iptables extensions for NAT targets.
 endef
 
 define Package/iptables-mod-nat-extra
@@ -471,7 +481,7 @@ endef
 
 define Package/ip6tables-zz-legacy
 $(call Package/iptables/Default)
-  DEPENDS:=@IPV6 +kmod-ip6tables +xtables-legacy
+  DEPENDS:=@IPV6 +kmod-ip6tables +xtables-legacy +ip6tables-mod-nat
   CATEGORY:=Network
   TITLE:=IPv6 firewall administration tool
   PROVIDES:=ip6tables ip6tables-legacy
@@ -486,9 +496,10 @@ endef
 
 define Package/ip6tables-nft
 $(call Package/iptables/Default)
-  DEPENDS:=@IPV6 +kmod-ip6tables +xtables-nft
+  DEPENDS:=@IPV6 +kmod-ip6tables +xtables-nft +ip6tables-mod-nat
   TITLE:=IP firewall administration tool nft
   PROVIDES:=ip6tables
+  DEFAULT_VARIANT:=1
   ALTERNATIVES:=\
     300:/usr/sbin/ip6tables:xtables-nft-multi \
     300:/usr/sbin/ip6tables-restore:xtables-nft-multi \
@@ -735,6 +746,8 @@ define BuildPlugin
   $$(eval $$(call BuildPackage,$(1)))
 endef
 
+IPT_NAT-m += xt_NAT
+
 $(eval $(call BuildPackage,libxtables))
 $(eval $(call BuildPackage,libip4tc))
 $(eval $(call BuildPackage,libip6tc))
@@ -754,6 +767,7 @@ $(eval $(call BuildPlugin,iptables-mod-physdev,$(IPT_PHYSDEV-m)))
 $(eval $(call BuildPlugin,iptables-mod-filter,$(IPT_FILTER-m)))
 $(eval $(call BuildPlugin,iptables-mod-ipopt,$(IPT_IPOPT-m)))
 $(eval $(call BuildPlugin,iptables-mod-ipsec,$(IPT_IPSEC-m)))
+$(eval $(call BuildPlugin,iptables-mod-nat,$(IPT_NAT-m)))
 $(eval $(call BuildPlugin,iptables-mod-nat-extra,$(IPT_NAT_EXTRA-m)))
 $(eval $(call BuildPlugin,iptables-mod-iprange,$(IPT_IPRANGE-m)))
 $(eval $(call BuildPlugin,iptables-mod-cluster,$(IPT_CLUSTER-m)))

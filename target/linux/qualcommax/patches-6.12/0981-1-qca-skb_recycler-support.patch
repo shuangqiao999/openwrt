@@ -21,7 +21,7 @@
  };
  
  /* if you move pkt_type around you also must adapt those constants */
-@@ -1286,7 +1290,7 @@ static inline void kfree_skb_list(struct
+@@ -1318,7 +1322,7 @@ static inline void kfree_skb_list(struct
  	kfree_skb_list_reason(segs, SKB_DROP_REASON_NOT_SPECIFIED);
  }
  
@@ -30,7 +30,7 @@
  void consume_skb(struct sk_buff *skb);
  #else
  static inline void consume_skb(struct sk_buff *skb)
-@@ -1297,6 +1301,8 @@ static inline void consume_skb(struct sk
+@@ -1329,6 +1333,8 @@ static inline void consume_skb(struct sk
  
  void __consume_stateless_skb(struct sk_buff *skb);
  void  __kfree_skb(struct sk_buff *skb);
@@ -105,7 +105,7 @@
  obj-$(CONFIG_NET_DEVMEM) += devmem.o
 --- a/net/core/dev.c
 +++ b/net/core/dev.c
-@@ -6199,12 +6199,17 @@ static int process_backlog(struct napi_s
+@@ -6225,12 +6225,17 @@ static int process_backlog(struct napi_s
  
  	napi->weight = READ_ONCE(net_hotdata.dev_rx_weight);
  	while (again) {
@@ -387,7 +387,7 @@
  
  	data = kmalloc_reserve(&size, gfp_mask, NUMA_NO_NODE, NULL);
  	if (!data)
-@@ -5110,6 +5215,14 @@ static void skb_extensions_init(void) {}
+@@ -5112,6 +5217,14 @@ static void skb_extensions_init(void) {}
  
  void __init skb_init(void)
  {
@@ -402,7 +402,7 @@
  	net_hotdata.skbuff_cache = kmem_cache_create_usercopy("skbuff_head_cache",
  					      sizeof(struct sk_buff),
  					      0,
-@@ -5135,6 +5248,7 @@ void __init skb_init(void)
+@@ -5137,6 +5250,7 @@ void __init skb_init(void)
  						SKB_SMALL_HEAD_HEADROOM,
  						NULL);
  	skb_extensions_init();
@@ -410,7 +410,7 @@
  }
  
  static int
-@@ -6666,6 +6780,8 @@ static int pskb_carve_inside_header(stru
+@@ -6668,6 +6782,8 @@ static int pskb_carve_inside_header(stru
  	if (skb_pfmemalloc(skb))
  		gfp_mask |= __GFP_MEMALLOC;
  
@@ -419,7 +419,7 @@
  	data = kmalloc_reserve(&size, gfp_mask, NUMA_NO_NODE, NULL);
  	if (!data)
  		return -ENOMEM;
-@@ -6782,6 +6898,8 @@ static int pskb_carve_inside_nonlinear(s
+@@ -6784,6 +6900,8 @@ static int pskb_carve_inside_nonlinear(s
  	if (skb_pfmemalloc(skb))
  		gfp_mask |= __GFP_MEMALLOC;
  
